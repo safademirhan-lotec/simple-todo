@@ -16,5 +16,6 @@ A simple command-line TODO app in Node.js that allows you to manage tasks in a J
 
 
 `mytodo.js`: CLI app implemented in Javascript.
+
 `todos.json`: File that contains TODO items.
 
