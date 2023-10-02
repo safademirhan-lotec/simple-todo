@@ -1,14 +1,11 @@
+#!/usr/bin/env node
 const fs = require('fs');
-const readline = require('readline');
 const process = require('process');
 
-const TODO_FILENAME = 'todos.json';
+const TODO_FILENAME = './todos.json';
 const TODO_USERNAME = process.env.TODO_USERNAME || 'Unknown';
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const todos = loadTodos();
 
 function loadTodos() {
   try {
@@ -19,12 +16,11 @@ function loadTodos() {
   }
 }
 
-function saveTodos(todos) {
+function saveTodos() {
   fs.writeFileSync(TODO_FILENAME, JSON.stringify(todos), 'utf8');
 }
 
 function addTodo(title) {
-  const todos = loadTodos();
   const newTodo = {
     id: todos.length + 1,
     title,
@@ -32,12 +28,11 @@ function addTodo(title) {
     done: false,
   };
   todos.push(newTodo);
-  saveTodos(todos);
+  saveTodos();
   console.log(`Added TODO: "${title}"`);
 }
 
 function listTodos(options) {
-  const todos = loadTodos();
   if (options.done !== undefined) {
     const filteredTodos = todos.filter((todo) => todo.done === options.done);
     printTodos(filteredTodos);
@@ -58,11 +53,10 @@ function printTodos(todos) {
 }
 
 function markTodoDone(id) {
-  const todos = loadTodos();
   const todo = todos.find((t) => t.id === id);
   if (todo) {
     todo.done = true;
-    saveTodos(todos);
+    saveTodos();
     console.log(`Marked TODO ${id} as done.`);
   } else {
     console.log(`TODO ${id} not found.`);
@@ -70,11 +64,10 @@ function markTodoDone(id) {
 }
 
 function markTodoUndone(id) {
-  const todos = loadTodos();
   const todo = todos.find((t) => t.id === id);
   if (todo) {
     todo.done = false;
-    saveTodos(todos);
+    saveTodos();
     console.log(`Marked TODO ${id} as undone.`);
   } else {
     console.log(`TODO ${id} not found.`);
@@ -82,11 +75,10 @@ function markTodoUndone(id) {
 }
 
 function deleteTodo(id) {
-  const todos = loadTodos();
   const index = todos.findIndex((t) => t.id === id);
   if (index !== -1) {
     const deletedTodo = todos.splice(index, 1);
-    saveTodos(todos);
+    saveTodos();
     console.log(`Deleted TODO ${id}: ${deletedTodo[0].title}`);
   } else {
     console.log(`TODO ${id} not found.`);
@@ -94,11 +86,10 @@ function deleteTodo(id) {
 }
 
 function updateTodo(id, newTitle) {
-  const todos = loadTodos();
   const todo = todos.find((t) => t.id === id);
   if (todo) {
     todo.title = newTitle;
-    saveTodos(todos);
+    saveTodos();
     console.log(`Updated TODO ${id}: "${newTitle}"`);
   } else {
     console.log(`TODO ${id} not found.`);
@@ -136,17 +127,15 @@ function main() {
       break;
     default:
       console.log('Invalid command. Usage:');
-      console.log('  mytodo add "A sample task description"');
-      console.log('  mytodo list all');
-      console.log('  mytodo done 1');
-      console.log('  mytodo undone 1');
-      console.log('  mytodo list --done');
-      console.log('  mytodo list --undone');
-      console.log('  mytodo delete 1');
-      console.log('  mytodo update 1 "A new task description"');
+      console.log('  node mytodo.js add "A sample task description"');
+      console.log('  node mytodo.js list all');
+      console.log('  node mytodo.js done 1');
+      console.log('  node mytodo.js undone 1');
+      console.log('  node mytodo.js list --done');
+      console.log('  node mytodo.js list --undone');
+      console.log('  node mytodo.js delete 1');
+      console.log('  node mytodo.js update 1 "A new task description"');
   }
-
-  rl.close();
 }
 
 main();
