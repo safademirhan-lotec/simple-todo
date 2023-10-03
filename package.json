@@ -1,13 +1,14 @@
 {
   "name": "simple-todo",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple TODO App",
   "main": "index.js",
-  "bin":{
+  "bin": {
     "mytodo": "mytodo.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node mytodo.js"
   },
   "repository": {
     "type": "git",
