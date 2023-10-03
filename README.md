@@ -5,14 +5,14 @@ A simple command-line TODO app in Node.js that allows you to manage tasks in a J
 
 ## Features
 
-- Add a task
-- List all tasks
-- Mark a task as done
-- Mark a task as undone
-- List all done tasks
-- List all undone tasks
-- Delete a task
-- Update a task description
+- Add a task: `mytodo add "A sample task description"`
+- List all tasks: `mytodo list` and `mytodo`
+- Mark a task as done: `mytodo done 1`
+- Mark a task as undone: `mytodo undone 1`
+- List all done tasks: `mytodo list --done`
+- List all undone tasks: `mytodo list --undone`
+- Delete a task: `mytodo delete 1`
+- Update a task description: `mytodo update 1 "A new task description"`
 
 
 `mytodo.js`: CLI app implemented in Javascript.
@@ -27,6 +27,7 @@ Set the TODO_USERNAME environment variable. You can do this in your shell with t
 
 ### Make the script file executable
 Make the mytodo.js file executable by running the following command in your shell
+`chmod +x mytodo.js`
 
 ### Make your command work with one word, just like any other command 
 In package.json, add the line: 

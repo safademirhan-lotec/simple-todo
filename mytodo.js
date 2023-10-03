@@ -7,6 +7,7 @@ const TODO_USERNAME = process.env.TODO_USERNAME || 'Unknown';
 
 const todos = loadTodos();
 
+// load todos added before to re-write the file
 function loadTodos() {
   try {
     const data = fs.readFileSync(TODO_FILENAME, 'utf8');
@@ -16,6 +17,7 @@ function loadTodos() {
   }
 }
 
+// replace the file with the updated version
 function saveTodos() {
   fs.writeFileSync(TODO_FILENAME, JSON.stringify(todos), 'utf8');
 }
@@ -32,6 +34,7 @@ function addTodo(title) {
   console.log(`Added TODO: "${title}"`);
 }
 
+// list todos with or without options (options: done/undone)
 function listTodos(options) {
   if (options.done !== undefined) {
     const filteredTodos = todos.filter((todo) => todo.done === options.done);
@@ -41,6 +44,7 @@ function listTodos(options) {
   }
 }
 
+// utility function for listTodos(options)
 function printTodos(todos) {
   if (todos.length === 0) {
     console.log('No TODOs found.');
@@ -52,6 +56,7 @@ function printTodos(todos) {
   }
 }
 
+// mark the todo done by searching the array with the id property
 function markTodoDone(id) {
   const todo = todos.find((t) => t.id === id);
   if (todo) {
@@ -63,6 +68,7 @@ function markTodoDone(id) {
   }
 }
 
+// mark the todo undone by searching the array with the id property
 function markTodoUndone(id) {
   const todo = todos.find((t) => t.id === id);
   if (todo) {
@@ -74,6 +80,7 @@ function markTodoUndone(id) {
   }
 }
 
+// delete the todo by searching the array with the id property
 function deleteTodo(id) {
   const index = todos.findIndex((t) => t.id === id);
   if (index !== -1) {
@@ -85,6 +92,7 @@ function deleteTodo(id) {
   }
 }
 
+// update the todo by searching the array with the id property
 function updateTodo(id, newTitle) {
   const todo = todos.find((t) => t.id === id);
   if (todo) {
@@ -98,6 +106,12 @@ function updateTodo(id, newTitle) {
 
 function main() {
   const [command, ...args] = process.argv.slice(2);
+  
+  // list all todos when no argument is given by the user
+  if (!command) {
+    listTodos({});
+    return;
+  }
 
   switch (command) {
     case 'add':
@@ -127,14 +141,14 @@ function main() {
       break;
     default:
       console.log('Invalid command. Usage:');
-      console.log('  node mytodo.js add "A sample task description"');
-      console.log('  node mytodo.js list all');
-      console.log('  node mytodo.js done 1');
-      console.log('  node mytodo.js undone 1');
-      console.log('  node mytodo.js list --done');
-      console.log('  node mytodo.js list --undone');
-      console.log('  node mytodo.js delete 1');
-      console.log('  node mytodo.js update 1 "A new task description"');
+      console.log(' mytodo add "A sample task description"');
+      console.log(' mytodo list all');
+      console.log(' mytodo done 1');
+      console.log(' mytodo undone 1');
+      console.log(' mytodo list --done');
+      console.log(' mytodo list --undone');
+      console.log(' mytodo delete 1');
+      console.log(' mytodo update 1 "A new task description"');
   }
 }
 
