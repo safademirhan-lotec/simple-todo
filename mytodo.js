@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const process = require('process');
 
-const TODO_FILENAME = './todos.json';
+const TODO_FILENAME = path.join(__dirname, './todos.json');
 const TODO_USERNAME = process.env.TODO_USERNAME || 'Unknown';
 
 const todos = loadTodos();
