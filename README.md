@@ -19,3 +19,17 @@ A simple command-line TODO app in Node.js that allows you to manage tasks in a J
 
 `todos.json`: File that contains TODO items.
 
+## Steps to Follow
+
+### How to Assign Todos To Someone
+Set the TODO_USERNAME environment variable. You can do this in your shell with the following command
+`export TODO_USERNAME="Safa Demirhan"`
+
+### Make the script file executable
+Make the mytodo.js file executable by running the following command in your shell
+
+### Make your command work with one word, just like any other command 
+In package.json, add the line: 
+`"bin":{
+    "mytodo": "mytodo.js"
+  }`
