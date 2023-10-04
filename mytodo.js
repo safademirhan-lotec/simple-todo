@@ -6,8 +6,6 @@ const process = require('process');
 const TODO_FILENAME = path.join(__dirname, './todos.txt');
 const TODO_USERNAME = process.env.TODO_USERNAME || 'Unknown';
 
-const todos = loadTodos();
-
 // load todos added before to re-write the file
 function loadTodos() {
   try {
@@ -27,7 +25,7 @@ function saveTodos() {
 
 function addTodo(title) {
   const newTodo = {
-    id: todos.length + 1,
+    id: Math.floor(1000 + Math.random() * 9000),
     title,
     asignee: TODO_USERNAME,
     done: false,
@@ -62,6 +60,7 @@ function printTodos(todos) {
 
 // mark the todo done by searching the array with the id property
 function markTodoDone(id) {
+  const todos = loadTodos();
   const todo = todos.find((t) => t.id === id);
   if (todo) {
     todo.done = true;
@@ -74,6 +73,7 @@ function markTodoDone(id) {
 
 // mark the todo undone by searching the array with the id property
 function markTodoUndone(id) {
+  const todos = loadTodos();
   const todo = todos.find((t) => t.id === id);
   if (todo) {
     todo.done = false;
@@ -86,6 +86,7 @@ function markTodoUndone(id) {
 
 // delete the todo by searching the array with the id property
 function deleteTodo(id) {
+  const todos = loadTodos();
   const index = todos.findIndex((t) => t.id === id);
   if (index !== -1) {
     const deletedTodo = todos.splice(index, 1);
@@ -98,6 +99,7 @@ function deleteTodo(id) {
 
 // update the todo by searching the array with the id property
 function updateTodo(id, newTitle) {
+  const todos = loadTodos();
   const todo = todos.find((t) => t.id === id);
   if (todo) {
     todo.title = newTitle;
