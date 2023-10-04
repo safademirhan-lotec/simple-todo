@@ -1,19 +1,19 @@
 #!/usr/bin/env node
-const fs = require("fs");
-// const fs = require('fs').promises;
-const path = require("path");
-const process = require("process");
+const fs = require('fs');
+const path = require('path');
+const process = require('process');
 
-const TODO_FILENAME = path.join(__dirname, "./todos.json");
-const TODO_USERNAME = process.env.TODO_USERNAME || "Unknown";
+const TODO_FILENAME = path.join(__dirname, './todos.txt');
+const TODO_USERNAME = process.env.TODO_USERNAME || 'Unknown';
 
 const todos = loadTodos();
 
 // load todos added before to re-write the file
 function loadTodos() {
   try {
-    const data = fs.readFileSync(TODO_FILENAME, "utf8");
-    return JSON.parse(data);
+    const data = fs.readFileSync(TODO_FILENAME, 'utf8');
+    const lines = data.split('\n').filter(Boolean);
+    return lines.map((line) => JSON.parse(line));
   } catch (err) {
     return [];
   }
@@ -21,7 +21,8 @@ function loadTodos() {
 
 // replace the file with the updated version
 function saveTodos() {
-  fs.writeFileSync(TODO_FILENAME, JSON.stringify(todos), "utf8");
+  const data = todos.map((todo) => JSON.stringify(todo)).join('\n');
+  fs.writeFileSync(TODO_FILENAME, data, 'utf8');
 }
 
 function addTodo(title) {
@@ -31,8 +32,7 @@ function addTodo(title) {
     asignee: TODO_USERNAME,
     done: false,
   };
-  todos.push(newTodo);
-  saveTodos();
+  fs.appendFileSync(TODO_FILENAME, JSON.stringify(newTodo) + '\n', 'utf8');
   console.log(`Added TODO: "${title}"`);
 }
 
@@ -49,12 +49,12 @@ function listTodos(options) {
 // utility function for listTodos(options)
 function printTodos(todos) {
   if (todos.length === 0) {
-    console.log("No TODOs found.");
+    console.log('No TODOs found.');
   } else {
     todos.forEach((todo) => {
-      const status = todo.done ? "Done" : "Undone";
+      const status = todo.done ? 'Done' : 'Undone';
       console.log(
-        `[${todo.id}] ${status}: ${todo.title} (Assigned to: ${todo.asignee})`
+        `[${todo.id}] ${status}: ${todo.title} (Assigned to: ${todo.asignee})`,
       );
     });
   }
@@ -118,40 +118,40 @@ function main() {
   }
 
   switch (command) {
-    case "add":
-      addTodo(args.join(" "));
+    case 'add':
+      addTodo(args.join(' '));
       break;
-    case "list":
+    case 'list':
       const options = {};
-      if (args.includes("--done")) {
+      if (args.includes('--done')) {
         options.done = true;
       }
-      if (args.includes("--undone")) {
+      if (args.includes('--undone')) {
         options.done = false;
       }
       listTodos(options);
       break;
-    case "done":
+    case 'done':
       markTodoDone(parseInt(args[0]));
       break;
-    case "undone":
+    case 'undone':
       markTodoUndone(parseInt(args[0]));
       break;
-    case "delete":
+    case 'delete':
       deleteTodo(parseInt(args[0]));
       break;
-    case "update":
-      updateTodo(parseInt(args[0]), args.slice(1).join(" "));
+    case 'update':
+      updateTodo(parseInt(args[0]), args.slice(1).join(' '));
       break;
     default:
-      console.log("Invalid command. Usage:");
+      console.log('Invalid command. Usage:');
       console.log(' mytodo add "A sample task description"');
-      console.log(" mytodo list all");
-      console.log(" mytodo done 1");
-      console.log(" mytodo undone 1");
-      console.log(" mytodo list --done");
-      console.log(" mytodo list --undone");
-      console.log(" mytodo delete 1");
+      console.log(' mytodo list all');
+      console.log(' mytodo done 1');
+      console.log(' mytodo undone 1');
+      console.log(' mytodo list --done');
+      console.log(' mytodo list --undone');
+      console.log(' mytodo delete 1');
       console.log(' mytodo update 1 "A new task description"');
   }
 }
